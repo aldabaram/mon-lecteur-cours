@@ -1,5 +1,4 @@
-// ⚠️ Assurez-vous que API_URL correspond au domaine de Runawail si besoin
-const API_URL = ''; // vide pour domaine relatif
+const API_URL = ''; // relatif pour Runawail
 
 let coursesData = {};
 let allFiles = [];
@@ -33,14 +32,13 @@ async function loadCoursesTree() {
     }
 }
 
-// --- Création de la liste globale de fichiers ---
+// --- Création liste fichiers ---
 function initializeFilesList() {
     console.log('📂 Initialisation de la liste globale des fichiers...');
     allFiles = [];
     function collectFiles(folderObj, path = []) {
         if (folderObj.__files) {
             folderObj.__files.forEach(file => {
-                console.log('Fichier trouvé:', file.path);
                 allFiles.push({
                     name: file.name,
                     path: [...path, file.name].join(' / '),
@@ -80,7 +78,7 @@ function handleSearch(e) {
     renderSearchResults(filteredFiles, searchTerm);
 }
 
-// --- Affichage résultats de recherche ---
+// --- Affichage résultats recherche ---
 function renderSearchResults(files, searchTerm) {
     const container = document.getElementById('folderTree');
     const breadcrumb = document.getElementById('breadcrumb');
@@ -216,14 +214,23 @@ function goToPath(index) {
     renderCurrentFolder();
 }
 
-// --- Ouverture d’un fichier ---
+// --- Ouverture d’un fichier (bloque .md) ---
 async function openFile(filePath, fileBox) {
-    console.log('🔗 Ouverture du fichier:', filePath);
+    if(filePath.endsWith('.md')) {
+        const contentDiv = document.querySelector('.content');
+        contentDiv.innerHTML = `
+            <div class="content-empty">
+                <div class="content-empty-icon">❌</div>
+                <h3>Lecture interdite</h3>
+                <p>Les fichiers Markdown (.md) ne peuvent pas être ouverts.</p>
+            </div>
+        `;
+        return;
+    }
+
     try {
         const response = await fetch(`${API_URL}/api/file/${encodeURIComponent(filePath)}`);
-        console.log('Réponse /api/file:', response.status);
-        if(!response.ok) throw new Error('Fichier non trouvé');
-
+        if(!response.ok) throw new Error('Fichier non trouvé ou interdit');
         const content = await response.text();
         currentFilePath = filePath;
 
@@ -232,11 +239,15 @@ async function openFile(filePath, fileBox) {
 
         document.querySelectorAll('.item-box').forEach(item => item.classList.remove('active'));
         if(fileBox) fileBox.classList.add('active');
-
-        console.log('✅ Fichier chargé avec succès');
     } catch(error) {
         const contentDiv = document.querySelector('.content');
-        contentDiv.innerHTML = `<div class="content-empty"><div class="content-empty-icon">❌</div><h3>Erreur de chargement</h3><p>Impossible de charger le fichier</p></div>`;
+        contentDiv.innerHTML = `
+            <div class="content-empty">
+                <div class="content-empty-icon">❌</div>
+                <h3>Erreur de chargement</h3>
+                <p>Impossible de charger le fichier</p>
+            </div>
+        `;
         console.error('Erreur openFile:', error);
     }
 }
