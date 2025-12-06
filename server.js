@@ -36,7 +36,7 @@ function getFolderTree(dirPath) {
             } catch (err) {
                 console.error(`❌ Erreur dans dossier ${item.name}:`, err);
             }
-        } else if (item.isFile()) {
+        } else if (item.isFile() && !item.name.endsWith('.md')) { // ❌ Bloquer .md
             folderObj.__files.push({
                 name: item.name,
                 path: path.relative(COURSES_DIR, itemFullPath)
@@ -45,6 +45,7 @@ function getFolderTree(dirPath) {
     }
     return folderObj;
 }
+
 
 // --- Route arborescence ---
 app.get('/api/tree', (req, res) => {
