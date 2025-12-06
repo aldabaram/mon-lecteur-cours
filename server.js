@@ -6,13 +6,13 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS pour le frontend
+// Autoriser toutes les origines (utile pour Runawail)
 app.use(cors());
 
 // Dossier statique pour ton frontend
 app.use(express.static('public'));
 
-// 📂 Dossier des cours (corrigé pour ton projet)
+// Dossier des cours
 const COURSES_DIR = path.join(__dirname, 'cours');
 
 // --- Fonction pour générer l’arborescence ---
@@ -65,7 +65,7 @@ app.get('/api/tree', (req, res) => {
     }
 });
 
-// --- Route fichier (corrigée pour tous les chemins) ---
+// --- Route fichier ---
 app.get('/api/file/*', (req, res) => {
     try {
         const requestedPath = req.params[0]; // prend tout après /api/file/

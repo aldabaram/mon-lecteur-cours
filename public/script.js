@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:3000';
+// ⚠️ Assurez-vous que API_URL correspond au domaine de Runawail si besoin
+const API_URL = ''; // vide pour domaine relatif
 
 let coursesData = {};
 let allFiles = [];
@@ -26,7 +27,6 @@ async function loadCoursesTree() {
             <div class="error">
                 <div class="empty-folder-icon">❌</div>
                 <p>Erreur de connexion au serveur</p>
-                <p style="font-size: 14px; margin-top: 10px;">Assure-toi que le serveur Node.js est lancé</p>
             </div>
         `;
         console.error('Erreur loadCoursesTree:', error);
@@ -104,7 +104,6 @@ function renderSearchResults(files, searchTerm) {
     }
     searchFolders(coursesData);
 
-    // Affichage dossiers
     matchingFolders.forEach(f => {
         const folderBox = document.createElement('div');
         folderBox.className = 'item-box folder-box';
@@ -119,7 +118,6 @@ function renderSearchResults(files, searchTerm) {
         folderContent.appendChild(folderBox);
     });
 
-    // Affichage fichiers
     files.forEach(f => {
         const parentFolderPath = f.folderPath.join(' / ');
         const isInsideDisplayedFolder = matchingFolders.some(d => {
