@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 // Autoriser toutes les origines (utile pour Runawail)
 app.use(cors());
 
-// Dossier statique pour ton frontend
+// Dossier statique pour le frontend
 app.use(express.static('public'));
 
 // Dossier des cours
@@ -68,9 +68,15 @@ app.get('/api/tree', (req, res) => {
 // --- Route fichier ---
 app.get('/api/file/*', (req, res) => {
     try {
-        const requestedPath = req.params[0]; // prend tout après /api/file/
+        const requestedPath = req.params[0]; 
         const filePath = path.join(COURSES_DIR, requestedPath);
         console.log(`📌 Appel API /api/file/${requestedPath}`);
+
+        // ❌ Bloquer les fichiers Markdown
+        if (filePath.endsWith('.md')) {
+            console.warn(`⚠️ Lecture interdite pour le fichier Markdown: ${filePath}`);
+            return res.status(403).send('Lecture des fichiers Markdown interdite');
+        }
 
         if (!fs.existsSync(filePath)) {
             console.error(`❌ Fichier non trouvé: ${filePath}`);
