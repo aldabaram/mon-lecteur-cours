@@ -1,9 +1,11 @@
-﻿services:
-  lecteur-cours:
+﻿version: "3.9"
+
+services:
+  app:
     build: .
     ports:
       - "3000:3000"
     volumes:
-      - ./cours:/app/cours
-      - ./public:/app/public
-    restart: unless-stopped
+      - .:/app
+    environment:
+      - NODE_ENV=production
