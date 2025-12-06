@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://mon-lecteur-cours-production.up.railway.app';
 let coursesData = {};
 let allFiles = [];
 let currentPath = [];
