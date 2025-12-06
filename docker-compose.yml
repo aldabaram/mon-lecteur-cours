@@ -1,0 +1,9 @@
+﻿services:
+  lecteur-cours:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./cours:/app/cours
+      - ./public:/app/public
+    restart: unless-stopped

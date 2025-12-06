@@ -1,0 +1,13 @@
+{
+  "name": "mon-lecteur-cours",
+  "version": "1.0.0",
+  "description": "Lecteur de cours en Markdown",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "marked": "^9.0.0"
+  }
+}
