@@ -252,5 +252,10 @@ async function openFile(filePath, fileBox) {
     }
 }
 
+function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+}
+
+
 // --- Initialisation ---
 loadCoursesTree();

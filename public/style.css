@@ -26,3 +26,81 @@ body {font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: l
 ::-webkit-scrollbar-thumb {background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:10px;}
 .empty-folder {grid-column:1 / -1; text-align:center; padding:40px 20px; color:#6c757d;}
 .empty-folder-icon {font-size:60px; margin-bottom:15px; opacity:0.3;}
+/* ================================
+   RESPONSIVE — VERSION MOBILE
+   ================================ */
+
+@media (max-width: 768px) {
+
+    body {
+        overflow: auto; /* indispensable sur téléphone */
+    }
+
+    .container {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    /* --- Sidebar en mode caché / slide --- */
+    .sidebar {
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 20px;
+        border-radius: 15px;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+    }
+
+    .sidebar.open {
+        max-height: 70vh;
+        padding: 20px;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* --- Bouton d'ouverture du menu --- */
+    .mobile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        color: #667eea;
+        padding: 12px 15px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border: 2px solid #667eea;
+    }
+
+    /* --- Contenu devient 100% largeur --- */
+    .content {
+        width: 100%;
+        padding: 20px;
+        height: auto;
+        min-height: 300px;
+    }
+
+    /* --- Ajustement de la grille des éléments --- */
+    .folder-content {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+    }
+
+    .item-box {
+        padding: 15px 10px;
+    }
+
+    .item-icon {
+        font-size: 38px;
+    }
+
+    .item-name {
+        font-size: 12px;
+    }
+}
