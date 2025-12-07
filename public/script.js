@@ -1,4 +1,4 @@
-const API_URL = ''; // relatif pour Runawail
+const API_URL = ''; // Relatif pour Runawail
 
 let coursesData = {};
 let allFiles = [];
@@ -8,10 +8,8 @@ let currentFilePath = null;
 
 // --- Chargement des cours ---
 async function loadCoursesTree() {
-    console.log('📥 Chargement de l’arborescence...');
     try {
         const response = await fetch(`${API_URL}/api/tree`);
-        console.log('Réponse /api/tree:', response.status);
         if (!response.ok) throw new Error('Erreur lors du chargement');
 
         coursesData = await response.json();
@@ -19,8 +17,6 @@ async function loadCoursesTree() {
 
         initializeFilesList();
         renderCurrentFolder();
-
-        console.log('✅ Arborescence chargée avec succès');
     } catch (error) {
         document.getElementById('folderTree').innerHTML = `
             <div class="error">
@@ -28,13 +24,12 @@ async function loadCoursesTree() {
                 <p>Erreur de connexion au serveur</p>
             </div>
         `;
-        console.error('Erreur loadCoursesTree:', error);
+        console.error(error);
     }
 }
 
-// --- Création liste fichiers ---
+// --- Liste globale fichiers ---
 function initializeFilesList() {
-    console.log('📂 Initialisation de la liste globale des fichiers...');
     allFiles = [];
     function collectFiles(folderObj, path = []) {
         if (folderObj.__files) {
@@ -53,11 +48,9 @@ function initializeFilesList() {
             });
         }
     }
-
-    Object.keys(coursesData.__folders || {}).forEach(rootFolder => {
-        collectFiles(coursesData.__folders[rootFolder], [rootFolder]);
-    });
-    console.log('📌 Tous les fichiers collectés:', allFiles.length);
+    Object.keys(coursesData.__folders || {}).forEach(root =>
+        collectFiles(coursesData.__folders[root], [root])
+    );
 }
 
 // --- Recherche ---
@@ -65,89 +58,46 @@ document.getElementById('searchInput').addEventListener('input', handleSearch);
 
 function handleSearch(e) {
     const searchTerm = e.target.value.toLowerCase().trim();
-    if (searchTerm === '') {
-        renderCurrentFolder();
-        return;
-    }
+    if (searchTerm === '') return renderCurrentFolder();
 
-    const filteredFiles = allFiles.filter(fileInfo =>
-        fileInfo.name.toLowerCase().includes(searchTerm) ||
-        fileInfo.path.toLowerCase().includes(searchTerm)
+    const filtered = allFiles.filter(f =>
+        f.name.toLowerCase().includes(searchTerm) ||
+        f.path.toLowerCase().includes(searchTerm)
     );
 
-    renderSearchResults(filteredFiles, searchTerm);
+    renderSearchResults(filtered, searchTerm);
 }
 
-// --- Affichage résultats recherche ---
+// --- Résultats recherche ---
 function renderSearchResults(files, searchTerm) {
     const container = document.getElementById('folderTree');
-    const breadcrumb = document.getElementById('breadcrumb');
-    breadcrumb.style.display = 'none';
     container.innerHTML = '';
+    document.getElementById('breadcrumb').style.display = 'none';
 
     const folderContent = document.createElement('div');
     folderContent.className = 'folder-content';
 
-    const matchingFolders = [];
-    function searchFolders(folderObj, path = []) {
-        if (!folderObj.__folders) return;
-        Object.keys(folderObj.__folders).forEach(folderName => {
-            const child = folderObj.__folders[folderName];
-            const fullPath = [...path, folderName].join(' / ');
-
-            if (folderName.toLowerCase().includes(searchTerm) || fullPath.toLowerCase().includes(searchTerm)) {
-                matchingFolders.push({ name: folderName, folderObj: child, path: [...path] });
-            }
-        });
-    }
-    searchFolders(coursesData);
-
-    matchingFolders.forEach(f => {
-        const folderBox = document.createElement('div');
-        folderBox.className = 'item-box folder-box';
-        folderBox.tabIndex = 0;
-        folderBox.innerHTML = `<div class="item-icon">📁</div><div class="item-name">${f.name.replace(/_/g,' ')}</div>`;
-        folderBox.onclick = () => {
-            currentPath = [...f.path, f.name];
-            currentFolder = f.folderObj;
-            renderCurrentFolder();
-        };
-        folderBox.onkeydown = e => { if(e.key==='Enter') folderBox.onclick(); };
-        folderContent.appendChild(folderBox);
-    });
-
     files.forEach(f => {
-        const parentFolderPath = f.folderPath.join(' / ');
-        const isInsideDisplayedFolder = matchingFolders.some(d => {
-            const fullPath = [...d.path, d.name].join(' / ');
-            return parentFolderPath.startsWith(fullPath);
-        });
-        if (isInsideDisplayedFolder) return;
-
-        const displayName = f.name.replace(/_/g,' ').replace(/\.html$/i,'');
-        const fileBox = document.createElement('div');
-        fileBox.className = 'item-box';
-        fileBox.tabIndex = 0;
-        fileBox.innerHTML = `<div class="item-icon">📄</div><div class="item-name">${displayName}</div>`;
-        if(f.filePath === currentFilePath) fileBox.classList.add('active');
-        fileBox.onclick = () => openFile(f.filePath, fileBox);
-        fileBox.onkeydown = e => { if(e.key==='Enter') openFile(f.filePath, fileBox); };
-        folderContent.appendChild(fileBox);
+        const displayName = f.name.replace(/_/g, ' ').replace(/\.html$/, '');
+        const box = document.createElement('div');
+        box.className = 'item-box';
+        box.innerHTML = `<div class="item-icon">📄</div><div class="item-name">${displayName}</div>`;
+        box.onclick = () => openFile(f.filePath, box);
+        folderContent.appendChild(box);
     });
 
-    if (matchingFolders.length === 0 && files.length === 0) {
+    if (files.length === 0) {
         folderContent.innerHTML = `
             <div class="empty-folder">
                 <div class="empty-folder-icon">🔍</div>
-                <p>Aucun fichier ou dossier trouvé</p>
-            </div>
-        `;
+                <p>Aucun fichier trouvé</p>
+            </div>`;
     }
 
     container.appendChild(folderContent);
 }
 
-// --- Affichage dossier courant ---
+// --- Affiche le dossier courant ---
 function renderCurrentFolder() {
     const container = document.getElementById('folderTree');
     const breadcrumb = document.getElementById('breadcrumb');
@@ -155,9 +105,10 @@ function renderCurrentFolder() {
 
     if (currentPath.length > 0) {
         breadcrumb.style.display = 'block';
-        breadcrumb.innerHTML = '🏠 <span onclick="goToRoot()">Accueil</span>' +
-            currentPath.map((folder, index) =>
-                ` / <span onclick="goToPath(${index})">${folder.replace(/_/g,' ')}</span>`
+        breadcrumb.innerHTML =
+            '🏠 <span onclick="goToRoot()">Accueil</span>' +
+            currentPath.map((p, i) =>
+                ` / <span onclick="goToPath(${i})">${p.replace(/_/g, ' ')}</span>`
             ).join('');
     } else breadcrumb.style.display = 'none';
 
@@ -166,38 +117,46 @@ function renderCurrentFolder() {
 
     let hasContent = false;
 
-    if (currentFolder.__folders && Object.keys(currentFolder.__folders).length > 0) {
-        hasContent = true;
-        Object.keys(currentFolder.__folders).forEach(subFolderName => {
-            const folderBox = document.createElement('div');
-            folderBox.className = 'item-box folder-box';
-            folderBox.innerHTML = `<div class="item-icon">📁</div><div class="item-name">${subFolderName.replace(/_/g,' ')}</div>`;
-            folderBox.onclick = () => navigateToFolder(subFolderName);
-            folderContent.appendChild(folderBox);
+    // Dossiers
+    if (currentFolder.__folders) {
+        Object.keys(currentFolder.__folders).forEach(sub => {
+            hasContent = true;
+            const box = document.createElement('div');
+            box.className = 'item-box folder-box';
+            box.innerHTML = `<div class="item-icon">📁</div><div class="item-name">${sub.replace(/_/g, ' ')}</div>`;
+            box.onclick = () => navigateToFolder(sub);
+            folderContent.appendChild(box);
         });
     }
 
-    if (currentFolder.__files && currentFolder.__files.length > 0) {
-        hasContent = true;
-        currentFolder.__files.forEach(fileInfo => {
-            const displayName = fileInfo.name.replace(/_/g,' ').replace(/\.html$/i,'');
-            const fileBox = document.createElement('div');
-            fileBox.className = 'item-box';
-            fileBox.innerHTML = `<div class="item-icon">📄</div><div class="item-name">${displayName}</div>`;
-            fileBox.onclick = () => openFile(fileInfo.path, fileBox);
-            folderContent.appendChild(fileBox);
+    // Fichiers
+    if (currentFolder.__files) {
+        currentFolder.__files.forEach(f => {
+            hasContent = true;
+            const name = f.name.replace(/_/g, ' ').replace(/\.html$/, '');
+            const box = document.createElement('div');
+            box.className = 'item-box';
+            box.innerHTML = `<div class="item-icon">📄</div><div class="item-name">${name}</div>`;
+            box.onclick = () => openFile(f.path, box);
+            folderContent.appendChild(box);
         });
     }
 
-    if (!hasContent) folderContent.innerHTML = `<div class="empty-folder"><div class="empty-folder-icon">📂</div><p>Pas encore de cours</p></div>`;
+    if (!hasContent) {
+        folderContent.innerHTML = `
+            <div class="empty-folder">
+                <div class="empty-folder-icon">📂</div>
+                <p>Pas encore de cours disponibles</p>
+            </div>`;
+    }
 
     container.appendChild(folderContent);
 }
 
 // --- Navigation ---
-function navigateToFolder(folderName) {
-    currentPath.push(folderName);
-    currentFolder = currentFolder.__folders[folderName];
+function navigateToFolder(name) {
+    currentPath.push(name);
+    currentFolder = currentFolder.__folders[name];
     renderCurrentFolder();
 }
 
@@ -208,54 +167,50 @@ function goToRoot() {
 }
 
 function goToPath(index) {
-    currentPath = currentPath.slice(0,index+1);
+    currentPath = currentPath.slice(0, index + 1);
     currentFolder = coursesData;
-    for(let i=0;i<currentPath.length;i++) currentFolder = currentFolder.__folders[currentPath[i]];
+    currentPath.forEach(p => currentFolder = currentFolder.__folders[p]);
     renderCurrentFolder();
 }
 
-// --- Ouverture d’un fichier (bloque .md) ---
-async function openFile(filePath, fileBox) {
-    if(filePath.endsWith('.md')) {
-        const contentDiv = document.querySelector('.content');
-        contentDiv.innerHTML = `
+// --- Ouverture fichier ---
+async function openFile(filePath, box) {
+    if (filePath.endsWith('.md')) {
+        document.querySelector('.content').innerHTML = `
             <div class="content-empty">
                 <div class="content-empty-icon">❌</div>
                 <h3>Lecture interdite</h3>
-                <p>Les fichiers Markdown (.md) ne peuvent pas être ouverts.</p>
-            </div>
-        `;
+                <p>Les fichiers .md ne peuvent pas être ouverts.</p>
+            </div>`;
         return;
     }
 
     try {
-        const response = await fetch(`${API_URL}/api/file/${encodeURIComponent(filePath)}`);
-        if(!response.ok) throw new Error('Fichier non trouvé ou interdit');
-        const content = await response.text();
+        const res = await fetch(`${API_URL}/api/file/${encodeURIComponent(filePath)}`);
+        if (!res.ok) throw new Error();
+
+        const content = await res.text();
         currentFilePath = filePath;
 
-        const contentDiv = document.querySelector('.content');
-        contentDiv.innerHTML = content;
+        const div = document.querySelector('.content');
+        div.innerHTML = content;
 
-        document.querySelectorAll('.item-box').forEach(item => item.classList.remove('active'));
-        if(fileBox) fileBox.classList.add('active');
-    } catch(error) {
-        const contentDiv = document.querySelector('.content');
-        contentDiv.innerHTML = `
+        document.querySelectorAll('.item-box').forEach(i => i.classList.remove('active'));
+        if (box) box.classList.add('active');
+    } catch {
+        document.querySelector('.content').innerHTML = `
             <div class="content-empty">
                 <div class="content-empty-icon">❌</div>
                 <h3>Erreur de chargement</h3>
-                <p>Impossible de charger le fichier</p>
-            </div>
-        `;
-        console.error('Erreur openFile:', error);
+                <p>Impossible de charger ce fichier…</p>
+            </div>`;
     }
 }
 
+/* --- Bouton Mobile --- */
 function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('open');
 }
 
-
-// --- Initialisation ---
+// Lancer l'app
 loadCoursesTree();

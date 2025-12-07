@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Mes Cours</title>
-    
-        <!-- Favicon -->
-        <link rel="icon" type="image/png" href="assets/logo.png">
-    
-        <link rel="stylesheet" href="style.css">
-    </head>    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Cours</title>
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-    <div class="mobile-toggle" onclick="toggleSidebar()">📚 Menu</div>
+
+    <!-- Bouton Mobile -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">📚 Menu</button>
 
     <div class="container">
+        <!-- SIDEBAR -->
         <div class="sidebar">
             <h2>📚 Mes Cours</h2>
+
             <div class="search-section">
                 <input type="text" id="searchInput" class="search-input" placeholder="🔍 Rechercher un fichier...">
             </div>
-            <div id="breadcrumb" class="breadcrumb" style="display: none;"></div>
+
+            <div id="breadcrumb" class="breadcrumb" style="display:none;"></div>
             <div id="folderTree">
                 <div class="loading">Chargement des cours...</div>
             </div>
         </div>
+
+        <!-- CONTENT -->
         <div class="content">
             <div class="content-empty">
                 <div class="content-empty-icon">📖</div>
                 <h3>Bienvenue dans ton lecteur de cours !</h3>
-                <p>Sélectionne un fichier pour commencer</p>
+                <p>Sélectionne un cours dans le menu pour commencer</p>
             </div>
         </div>
     </div>
