@@ -158,12 +158,14 @@ function navigateToFolder(name) {
     currentPath.push(name);
     currentFolder = currentFolder.__folders[name];
     renderCurrentFolder();
+    // ATTENTION: On ne ferme PAS la sidebar ici (correction du problème)
 }
 
 function goToRoot() {
     currentPath = [];
     currentFolder = coursesData;
     renderCurrentFolder();
+    // ATTENTION: On ne ferme PAS la sidebar ici (correction du problème)
 }
 
 function goToPath(index) {
@@ -171,11 +173,22 @@ function goToPath(index) {
     currentFolder = coursesData;
     currentPath.forEach(p => currentFolder = currentFolder.__folders[p]);
     renderCurrentFolder();
+    // ATTENTION: On ne ferme PAS la sidebar ici (correction du problème)
 }
 
 // --- Ouverture fichier ---
 async function openFile(filePath, box) {
     const contentDiv = document.querySelector('.content');
+    const sidebar = document.querySelector('.sidebar');
+    const isMobile = window.innerWidth <= 768;
+
+    // Fonction utilitaire pour fermer la sidebar si on est en mobile
+    const closeSidebarIfMobile = () => {
+        if (isMobile) {
+            sidebar.classList.remove('open');
+        }
+    };
+
 
     if (filePath.endsWith('.md')) {
         contentDiv.innerHTML = `
@@ -184,6 +197,7 @@ async function openFile(filePath, box) {
                 <h3>Lecture interdite</h3>
                 <p>Les fichiers .md ne peuvent pas être ouverts.</p>
             </div>`;
+        closeSidebarIfMobile(); // Fermeture même si lecture interdite
         return;
     }
 
@@ -198,11 +212,8 @@ async function openFile(filePath, box) {
         document.querySelectorAll('.item-box').forEach(i => i.classList.remove('active'));
         if (box) box.classList.add('active');
 
-        // Fermer la sidebar sur mobile uniquement pour les fichiers
-        const sidebar = document.querySelector('.sidebar');
-        if (window.innerWidth <= 768) {
-            sidebar.classList.remove('open');
-        }
+        // Fermer la sidebar sur mobile UNIQUEMENT pour les fichiers (Logique conservée)
+        closeSidebarIfMobile(); 
 
     } catch {
         contentDiv.innerHTML = `
@@ -211,6 +222,7 @@ async function openFile(filePath, box) {
                 <h3>Erreur de chargement</h3>
                 <p>Impossible de charger ce fichier…</p>
             </div>`;
+        closeSidebarIfMobile(); // Fermer la sidebar en cas d'erreur de chargement de fichier
     }
 }
 
