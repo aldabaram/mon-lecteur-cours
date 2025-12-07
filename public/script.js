@@ -175,8 +175,10 @@ function goToPath(index) {
 
 // --- Ouverture fichier ---
 async function openFile(filePath, box) {
+    const contentDiv = document.querySelector('.content');
+
     if (filePath.endsWith('.md')) {
-        document.querySelector('.content').innerHTML = `
+        contentDiv.innerHTML = `
             <div class="content-empty">
                 <div class="content-empty-icon">❌</div>
                 <h3>Lecture interdite</h3>
@@ -191,14 +193,19 @@ async function openFile(filePath, box) {
 
         const content = await res.text();
         currentFilePath = filePath;
-
-        const div = document.querySelector('.content');
-        div.innerHTML = content;
+        contentDiv.innerHTML = content;
 
         document.querySelectorAll('.item-box').forEach(i => i.classList.remove('active'));
         if (box) box.classList.add('active');
+
+        // Fermer la sidebar sur mobile uniquement pour les fichiers
+        const sidebar = document.querySelector('.sidebar');
+        if (window.innerWidth <= 768) {
+            sidebar.classList.remove('open');
+        }
+
     } catch {
-        document.querySelector('.content').innerHTML = `
+        contentDiv.innerHTML = `
             <div class="content-empty">
                 <div class="content-empty-icon">❌</div>
                 <h3>Erreur de chargement</h3>
