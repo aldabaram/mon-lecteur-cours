@@ -212,21 +212,17 @@ function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('open');
 }
 
-// Fermer la sidebar quand on clique ailleurs
-document.addEventListener('click', function (e) {
-
+// Fermer la sidebar si clic en dehors (mais pas quand on clique sur menu ou sidebar)
+document.addEventListener('click', function(e) {
     const sidebar = document.querySelector('.sidebar');
     const button = document.querySelector('.mobile-toggle');
 
-    // Si sidebar ouverte, et qu'on clique ni sur la sidebar, ni sur le bouton
-    if (sidebar.classList.contains('open') &&
-        !sidebar.contains(e.target) &&
-        !button.contains(e.target)) {
-        
+    if (!sidebar.classList.contains('open')) return;
+
+    if (!sidebar.contains(e.target) && !button.contains(e.target)) {
         sidebar.classList.remove('open');
     }
 });
 
-
-// Lancer l'app
+// --- Initialisation ---
 loadCoursesTree();
