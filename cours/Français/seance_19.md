@@ -18,7 +18,7 @@
 ">
 
 <p style="text-align: center;">
-    <strong style="color: rgba(216, 11, 11, 1); font-size: 40px;">Séance 18 : </strong>
+    <strong style="color: rgba(216, 11, 11, 1); font-size: 40px;">Séance 19 : </strong>
 </p>
 <p style="text-align: center; font-size:25px; color: black; line-height: 1.2 ">Dandin, acte III, scène 7</p>
 <p style="text-align: center; font-size:20px; color: rgba(52, 52, 52, 1); line-height: 2">Commentaire de texte</p>
