@@ -231,5 +231,12 @@ function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('open');
 }
 
+// Simple fetch pour dire au serveur qu'il y a une visite
+fetch('../count.php')
+  .then(response => response.text())
+  .then(data => console.log("Visites totales :", data))
+  .catch(err => console.error(err));
+
+
 // --- Initialisation ---
 loadCoursesTree();
