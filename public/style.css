@@ -104,3 +104,7 @@ body {font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: l
         font-size: 12px;
     }
 }
+/* Bouton menu caché par défaut (PC) */
+.mobile-toggle {
+    display: none;
+}
