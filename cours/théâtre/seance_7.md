@@ -20,7 +20,7 @@
 <p style="text-align: center;">
     <strong style="color: rgba(216, 11, 11, 1); font-size: 40px;">Séance 7 : </strong>
 </p>
-<p style="text-align: center; font-size:25px; color: black; line-height: 0">Bilan du filage</p>
+<p style="text-align: center; font-size:25px; color: black; line-height: 1.2;">Bilan du filage</p>
 <br>
 
 ---
@@ -33,10 +33,10 @@
 
 - Les transitions
 - Le final
-- <p style=" color: red">Silence dans les coulisses</p>
+- <span style="color: red; line-height: 1.2;">Silence dans les coulisses</span>
 - Bien harmoniser les costumes
-- <p style=" color: red">Ne pas réciter son texte</p>
+- <span style="color: red; line-height: 1.2;">Ne pas réciter son texte</span>
 - Comportement
-- Etre centrer
+- Être centré
 
 </div>

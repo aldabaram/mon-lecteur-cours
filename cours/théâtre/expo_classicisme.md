@@ -20,7 +20,7 @@
 <p style="text-align: center;">
     <strong style="color: rgba(216, 11, 11, 1); font-size: 40px;">Exposé : </strong>
 </p>
-<p style="text-align: center; font-size:25px; color: black; line-height: 0">Le classicisme</p>
+<p style="text-align: center; font-size:25px; color: black; line-height: 1.2">Le classicisme</p>
 <br>
 
 ---
@@ -29,18 +29,18 @@
 
 ---
 
-## Les conditions de representation
+## Les conditions de représentation
 
 ### La scène
 
-- Théâtre célebre comme l'hotel de bourgogne
-- Décors : simple et fixe composé de teinture de grand tissus peints
-- L'éclairage : Chandelier ou ample à huile
+- Théâtre célèbre comme l'Hôtel de Bourgogne
+- Décors : simples et fixes, composés de teintures de grands tissus peints
+- Éclairage : chandeliers ou lampes à huile
 
 ### Les comédiens et leurs pratiques
 
-- Apprentissage par coeur
-- Aux vers et alexandrins
+- Apprentissage par cœur
+- En vers et alexandrins
 - Ils devaient transmettre des émotions
 
 ### Le style
@@ -51,15 +51,15 @@
 - Le destin
 - L'honneur
 
-### Les règle classiques
+### Les règles classiques
 
-la règle des trois unités:
+**La règle des trois unités :**
 
 - Le temps : 24 heures
 - Le lieu : un seul endroit
-- L'intrigue: une seule intrigue
+- L'intrigue : une seule intrigue
 
-règle de bienséance :
+**Règle de bienséance :**
 
 - Pas de sang
 
@@ -71,6 +71,6 @@ règle de bienséance :
 
 ## Conclusion
 
-Règle bien précise pour transmettre des valeurs
+Règles bien précises pour transmettre des valeurs
 
 </div>
