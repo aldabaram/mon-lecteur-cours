@@ -29,10 +29,10 @@
 
 ## L’échelle des décibels
 
-- **85 dB** : Seuil de risque — *40 heures*  
-- **100 dB** : Baladeurs, smartphones — *2 heures*  
-- **105 dB** : Concerts, discothèques — *45 minutes*  
-- **120 dB** : Seuil de douleur — *1 minute*  
+- **85 dB** : Seuil de risque — *40 heures par semaine*  
+- **100 dB** : Baladeurs, smartphones — *2 heures par semaine*  
+- **105 dB** : Concerts, discothèques — *45 minutes par semaine*  
+- **120 dB** : Seuil de douleur — *1 minute par semaine*  
 
 ---
 
