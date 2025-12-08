@@ -226,17 +226,23 @@ async function openFile(filePath, box) {
     }
 }
 
+async function registerVisit() {
+    try {
+        const res = await fetch(`${API_URL}/api/visit`);
+        const stats = await res.json();
+        console.log("👥 Visites totales :", stats.total);
+        console.log("📆 Visites aujourd'hui :", stats.daily);
+    } catch {
+        console.error("❌ Impossible d'enregistrer la visite");
+    }
+}
+
+
 /* --- Bouton Mobile --- */
 function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('open');
 }
 
-// Simple fetch pour dire au serveur qu'il y a une visite
-fetch('../count.php')
-  .then(response => response.text())
-  .then(data => console.log("Visites totales :", data))
-  .catch(err => console.error(err));
-
-
 // --- Initialisation ---
 loadCoursesTree();
+registerVisit();

@@ -6,16 +6,54 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Autoriser toutes les origines (utile pour Runawail)
+// Autoriser toutes les origines
 app.use(cors());
 
-// Dossier statique pour le frontend
+// Dossier statique
 app.use(express.static('public'));
 
 // Dossier des cours
 const COURSES_DIR = path.join(__dirname, 'cours');
 
-// --- Fonction pour générer l’arborescence ---
+// Fichier compteur
+const COUNTER_FILE = path.join(__dirname, 'counter.json');
+
+/* ============================================
+   📊 ROUTE : COMPTEUR DE VISITES (/api/visit)
+   ============================================ */
+app.get('/api/visit', (req, res) => {
+    try {
+        let data;
+
+        // Charger ou créer le fichier counter
+        if (!fs.existsSync(COUNTER_FILE)) {
+            data = { total: 0, daily: {} };
+        } else {
+            data = JSON.parse(fs.readFileSync(COUNTER_FILE, 'utf8'));
+        }
+
+        const today = new Date().toISOString().slice(0, 10);
+
+        // Total
+        data.total++;
+
+        // Par jour
+        if (!data.daily[today]) data.daily[today] = 0;
+        data.daily[today]++;
+
+        // Sauvegarde
+        fs.writeFileSync(COUNTER_FILE, JSON.stringify(data, null, 4));
+
+        res.json(data);
+    } catch (e) {
+        console.error("💥 Erreur compteur :", e);
+        res.status(500).json({ error: "Impossible d'enregistrer la visite" });
+    }
+});
+
+/* ============================================
+   📂 GENERATION ARBORESCENCE DES FICHIERS
+   ============================================ */
 function getFolderTree(dirPath) {
     const folderObj = { __folders: {}, __files: [] };
     console.log(`📥 Lecture du dossier : ${dirPath}`);
@@ -30,13 +68,15 @@ function getFolderTree(dirPath) {
 
     for (let item of items) {
         const itemFullPath = path.join(dirPath, item.name);
+
         if (item.isDirectory()) {
             try {
                 folderObj.__folders[item.name] = getFolderTree(itemFullPath);
             } catch (err) {
                 console.error(`❌ Erreur dans dossier ${item.name}:`, err);
             }
-        } else if (item.isFile() && !item.name.endsWith('.md')) { // ❌ Bloquer .md
+        } 
+        else if (item.isFile() && !item.name.endsWith('.md')) {
             folderObj.__files.push({
                 name: item.name,
                 path: path.relative(COURSES_DIR, itemFullPath)
@@ -46,8 +86,9 @@ function getFolderTree(dirPath) {
     return folderObj;
 }
 
-
-// --- Route arborescence ---
+/* ============================================
+   📁 ROUTE : ARBORESCENCE COURSES (/api/tree)
+   ============================================ */
 app.get('/api/tree', (req, res) => {
     console.log('📌 Appel API /api/tree');
     try {
@@ -56,9 +97,9 @@ app.get('/api/tree', (req, res) => {
             return res.status(500).json({ error: 'Dossier des cours non trouvé' });
         }
 
-        console.log(`📂 Dossier trouvé : ${COURSES_DIR}`);
         const tree = getFolderTree(COURSES_DIR);
         console.log('✅ Arborescence générée avec succès');
+
         res.json(tree);
     } catch (e) {
         console.error('💥 Erreur serveur /api/tree :', e);
@@ -66,14 +107,16 @@ app.get('/api/tree', (req, res) => {
     }
 });
 
-// --- Route fichier ---
+/* ============================================
+   📄 ROUTE : FICHIER INDIVIDUEL (/api/file)
+   ============================================ */
 app.get('/api/file/*', (req, res) => {
     try {
-        const requestedPath = req.params[0]; 
+        const requestedPath = req.params[0];
         const filePath = path.join(COURSES_DIR, requestedPath);
+
         console.log(`📌 Appel API /api/file/${requestedPath}`);
 
-        // ❌ Bloquer les fichiers Markdown
         if (filePath.endsWith('.md')) {
             console.warn(`⚠️ Lecture interdite pour le fichier Markdown: ${filePath}`);
             return res.status(403).send('Lecture des fichiers Markdown interdite');
@@ -92,7 +135,9 @@ app.get('/api/file/*', (req, res) => {
     }
 });
 
-// --- Lancement serveur ---
+/* ============================================
+   🚀 LANCEMENT SERVEUR
+   ============================================ */
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });

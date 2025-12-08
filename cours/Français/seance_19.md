@@ -56,7 +56,7 @@ Les Sottenville ont des hallucinations olfactives : ce sont des parents naïfs e
 
 ## Correction de la phrase
 
-> Ainsi, le comique de mots occupe une place importante donnant des caractéristiques importantes aux paersonnages les rendant amusants
+> Ainsi, le comique de mots occupe une place importante donnant des caractéristiques importantes aux paersonnages les rendant amusants.
 
 **Version corrigée :**  
 Ainsi, le comique de mots prend une grande place dans cette scène, donnant des caractéristiques intéressantes aux personnages et les rendant amusants.

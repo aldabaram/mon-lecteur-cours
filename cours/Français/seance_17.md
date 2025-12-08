@@ -38,7 +38,7 @@ Pièce contemporaine de Dandin : on ne mélange pas comique et tragique.
 
 ## Dénouement de la pièce
 
-Oreste → Hermione → Pyrrhus (*chef grec, fils d'Achille*) → Andromaque (*prisonnière de Pyrrhus avec Astyanax*) → Hector (*mort, chef des Troyens*).
+Oreste → Hermione → Pyrhus (*chef grec, fils d'Achille*) → Andromaque (*prisonnière de Pyrrhus avec Astyanax*) → Hector (*mort, chef des Troyens*).
 
 Hermione, frustrée, a fait tuer Pyrrhus par Oreste, puis elle lui reproche ce meurtre.  
 Oreste, lui, finit par perdre la raison.
@@ -46,10 +46,10 @@ Oreste, lui, finit par perdre la raison.
 !!! warning
     Le personnage tragique ne peut échapper à son destin : il se bat contre, mais en vain.
 
-> Expliquer pourquoi Hermione ou Pyrrhus est un personnage tragique
+> Expliquer pourquoi Hermione ou Pyrhus est un personnage tragique
 
 **Hermione** est un personnage tragique car elle est enfermée dans un amour impossible : elle aime Pyrrhus, mais celui-ci la délaisse. Ses choix la mènent malgré elle vers un malheur inévitable.
 
-**Pyrrhus** est tragique car, même s’il veut agir selon son cœur, il est pris entre son devoir politique et son amour pour Andromaque. Quoi qu’il fasse, il provoque sa propre perte.
+**Pyrhus** est tragique car, même s’il veut agir selon son cœur, il est pris entre son devoir politique et son amour pour Andromaque. Quoi qu’il fasse, il provoque sa propre perte.
 
 </div>

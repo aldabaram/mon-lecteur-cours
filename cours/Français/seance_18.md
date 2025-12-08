@@ -45,7 +45,7 @@ On a l’anaphore du pronom **il** avec une répétition du mot **amour**. Cela 
 
 De l’anaphore, du parallélisme et une accumulation sont présentes dans ce texte.
 
-> faire une phrase avec une ou plusieurs figures de répétition
+> faire une phrase avec une ou plusieurs figures de répétition.
 
 Je cours, je tombe, je me relève : je continue.
 
