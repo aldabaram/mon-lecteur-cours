@@ -1,143 +1,93 @@
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const cors = require('cors');
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
+
+// 🔥 IMPORTANT POUR RAILWAY
 const PORT = process.env.PORT || 3000;
 
-// Autoriser toutes les origines
-app.use(cors());
+// 📁 dossier des cours (ATTENTION À LA CASSE)
+const COURS_DIR = path.join(__dirname, "cours");
 
-// Dossier statique
-app.use(express.static('public'));
+app.use(express.json());
+app.use(express.static("public"));
 
-// Dossier des cours
-const COURSES_DIR = path.join(__dirname, 'cours');
+console.log("📂 Dossier cours utilisé :", COURS_DIR);
 
-// Fichier compteur
-const COUNTER_FILE = path.join(__dirname, 'counter.json');
-
-/* ============================================
-   📊 ROUTE : COMPTEUR DE VISITES (/api/visit)
-   ============================================ */
-app.get('/api/visit', (req, res) => {
-    try {
-        let data;
-
-        // Charger ou créer le fichier counter
-        if (!fs.existsSync(COUNTER_FILE)) {
-            data = { total: 0, daily: {} };
-        } else {
-            data = JSON.parse(fs.readFileSync(COUNTER_FILE, 'utf8'));
-        }
-
-        const today = new Date().toISOString().slice(0, 10);
-
-        // Total
-        data.total++;
-
-        // Par jour
-        if (!data.daily[today]) data.daily[today] = 0;
-        data.daily[today]++;
-
-        // Sauvegarde
-        fs.writeFileSync(COUNTER_FILE, JSON.stringify(data, null, 4));
-
-        res.json(data);
-    } catch (e) {
-        console.error("💥 Erreur compteur :", e);
-        res.status(500).json({ error: "Impossible d'enregistrer la visite" });
-    }
-});
-
-/* ============================================
-   📂 GENERATION ARBORESCENCE DES FICHIERS
-   ============================================ */
-function getFolderTree(dirPath) {
-    const folderObj = { __folders: {}, __files: [] };
-    console.log(`📥 Lecture du dossier : ${dirPath}`);
-
-    let items;
-    try {
-        items = fs.readdirSync(dirPath, { withFileTypes: true });
-    } catch (err) {
-        console.error(`❌ Erreur lecture dossier ${dirPath}:`, err);
-        throw err;
-    }
-
-    for (let item of items) {
-        const itemFullPath = path.join(dirPath, item.name);
-
-        if (item.isDirectory()) {
-            try {
-                folderObj.__folders[item.name] = getFolderTree(itemFullPath);
-            } catch (err) {
-                console.error(`❌ Erreur dans dossier ${item.name}:`, err);
-            }
-        } 
-        else if (item.isFile() && !item.name.endsWith('.md')) {
-            folderObj.__files.push({
-                name: item.name,
-                path: path.relative(COURSES_DIR, itemFullPath)
-            });
-        }
-    }
-    return folderObj;
+/**
+ * Vérification que le dossier existe
+ */
+if (!fs.existsSync(COURS_DIR)) {
+    console.error("❌ Le dossier 'cours' est introuvable !");
 }
 
-/* ============================================
-   📁 ROUTE : ARBORESCENCE COURSES (/api/tree)
-   ============================================ */
-app.get('/api/tree', (req, res) => {
-    console.log('📌 Appel API /api/tree');
-    try {
-        if (!fs.existsSync(COURSES_DIR)) {
-            console.error(`❌ Dossier des cours non trouvé : ${COURSES_DIR}`);
-            return res.status(500).json({ error: 'Dossier des cours non trouvé' });
+/**
+ * Construit l'arborescence
+ */
+function buildTree(dirPath) {
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+
+    return entries.map(entry => {
+        const fullPath = path.join(dirPath, entry.name);
+        const relativePath = path.relative(COURS_DIR, fullPath);
+
+        if (entry.isDirectory()) {
+            return {
+                name: entry.name,
+                type: "folder",
+                path: relativePath,
+                children: buildTree(fullPath)
+            };
+        } else {
+            return {
+                name: entry.name,
+                type: "file",
+                path: relativePath
+            };
         }
+    });
+}
 
-        const tree = getFolderTree(COURSES_DIR);
-        console.log('✅ Arborescence générée avec succès');
-
+/**
+ * 🌳 API tree
+ */
+app.get("/api/tree", (req, res) => {
+    try {
+        const tree = buildTree(COURS_DIR);
         res.json(tree);
-    } catch (e) {
-        console.error('💥 Erreur serveur /api/tree :', e);
-        res.status(500).json({ error: 'Impossible de lire les fichiers' });
+    } catch (err) {
+        console.error("❌ Erreur tree:", err);
+        res.status(500).json({ error: "Erreur lors du chargement de l'arborescence" });
     }
 });
 
-/* ============================================
-   📄 ROUTE : FICHIER INDIVIDUEL (/api/file)
-   ============================================ */
-app.get('/api/file/*', (req, res) => {
-    try {
-        const requestedPath = req.params[0];
-        const filePath = path.join(COURSES_DIR, requestedPath);
+/**
+ * 📄 API file
+ */
+app.get("/api/file", (req, res) => {
+    const filePath = req.query.path;
 
-        console.log(`📌 Appel API /api/file/${requestedPath}`);
-
-        if (filePath.endsWith('.md')) {
-            console.warn(`⚠️ Lecture interdite pour le fichier Markdown: ${filePath}`);
-            return res.status(403).send('Lecture des fichiers Markdown interdite');
-        }
-
-        if (!fs.existsSync(filePath)) {
-            console.error(`❌ Fichier non trouvé: ${filePath}`);
-            return res.status(404).send('Fichier non trouvé');
-        }
-
-        res.sendFile(filePath);
-        console.log(`✅ Fichier envoyé: ${filePath}`);
-    } catch (e) {
-        console.error(`💥 Erreur serveur /api/file:`, e);
-        res.status(500).send('Erreur serveur');
+    if (!filePath) {
+        return res.status(400).json({ error: "Chemin manquant" });
     }
+
+    const fullPath = path.join(COURS_DIR, filePath);
+
+    // 🔐 sécurité
+    if (!fullPath.startsWith(COURS_DIR)) {
+        return res.status(403).json({ error: "Accès interdit" });
+    }
+
+    fs.readFile(fullPath, "utf8", (err, data) => {
+        if (err) {
+            console.error("❌ Erreur lecture fichier:", err);
+            return res.status(500).json({ error: "Impossible de lire le fichier" });
+        }
+        res.json({ content: data });
+    });
 });
 
-/* ============================================
-   🚀 LANCEMENT SERVEUR
-   ============================================ */
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🚀 Serveur lancé sur le port ${PORT}`);
 });
