@@ -17,7 +17,9 @@
 <p style="text-align: center;">
     <strong style="color: rgba(216, 11, 11, 1); font-size: 40px;">Chapitre 3 :</strong>
 </p>
-<p style="text-align: center; font-size:25px; color: black; line-height: 1.2">Biodiversité actuelle, biodiversité passée</p>
+<p style="text-align: center; font-size:25px; color: black; line-height: 1.2">
+Biodiversité actuelle, biodiversité passée
+</p>
 <br>
 
 ---
@@ -28,9 +30,9 @@
 
 ## I) Modification de la biodiversité au cours du temps
 
-<p style="color: red;">
+<p style="color: red; line-height: 1.2;">
 Des espèces apparaissent et disparaissent au cours du temps.  
-Les espèces sont définies par l'Homme selon des critères d’interfécondité et/ou de ressemblance (notamment pour les fossiles).  
+Les espèces sont définies par l’Homme selon des critères d’interfécondité et/ou de ressemblance (notamment pour les fossiles).  
 La biodiversité varie dans le temps : elle augmente globalement, sauf lors des crises biologiques.
 </p>
 
@@ -45,11 +47,19 @@ La biodiversité varie dans le temps : elle augmente globalement, sauf lors des 
 
 ## II) Les échelles de la biodiversité
 
+(voir podcast)
+
 ---
 
 ## III) La biodiversité entre les individus
 
 !!! warning
     **Problème :** Qu’est-ce qui différencie les allèles (versions) d’un même gène ?
+
+<p style="color: red; line-height: 1.2;">
+Un gène peut exister sous différentes formes : les allèles de ce gène.  
+Ces allèles sont le résultat de mutations aléatoires affectant l’ADN.  
+La diversité génétique correspond à la diversité des allèles présents chez les individus d’une même espèce au sein d’une population.
+</p>
 
 </div>
