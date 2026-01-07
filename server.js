@@ -27,8 +27,10 @@ function buildCustomTree(dirPath) {
         const relativePath = path.relative(COURS_DIR, fullPath);
 
         if (entry.isDirectory()) {
+            // On garde le dossier
             result.__folders[entry.name] = buildCustomTree(fullPath);
-        } else {
+        } else if (entry.name.toLowerCase().endsWith('.html')) {
+            // ✅ On n'ajoute que si c'est du .html
             result.__files.push({
                 name: entry.name,
                 path: relativePath

@@ -34,12 +34,15 @@ function initializeFilesList() {
     function collectFiles(folderObj, path = []) {
         if (folderObj.__files) {
             folderObj.__files.forEach(file => {
-                allFiles.push({
-                    name: file.name,
-                    path: [...path, file.name].join(' / '),
-                    filePath: file.path,
-                    folderPath: path
-                });
+                // ✅ Double vérification de l'extension
+                if (file.name.toLowerCase().endsWith('.html')) {
+                    allFiles.push({
+                        name: file.name,
+                        path: [...path, file.name].join(' / '),
+                        filePath: file.path,
+                        folderPath: path
+                    });
+                }
             });
         }
         if (folderObj.__folders) {
@@ -48,7 +51,6 @@ function initializeFilesList() {
             });
         }
     }
-    // On commence par explorer la racine
     collectFiles(coursesData, []);
 }
 
