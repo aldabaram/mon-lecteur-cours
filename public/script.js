@@ -226,18 +226,6 @@ async function openFile(filePath, box) {
     }
 }
 
-async function registerVisit() {
-    try {
-        const res = await fetch(`${API_URL}/api/visit`);
-        const stats = await res.json();
-        console.log("👥 Visites totales :", stats.total);
-        console.log("📆 Visites aujourd'hui :", stats.daily);
-    } catch {
-        console.error("❌ Impossible d'enregistrer la visite");
-    }
-}
-
-
 /* --- Bouton Mobile --- */
 function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('open');
