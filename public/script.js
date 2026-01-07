@@ -1,4 +1,4 @@
-const API_URL = ''; // Relatif pour Runawail
+const API_URL = ''; // Relatif pour Render/Railway
 
 let coursesData = {};
 let allFiles = [];
@@ -28,7 +28,7 @@ async function loadCoursesTree() {
     }
 }
 
-// --- Liste globale fichiers ---
+// --- Liste globale fichiers pour la recherche ---
 function initializeFilesList() {
     allFiles = [];
     function collectFiles(folderObj, path = []) {
@@ -48,9 +48,8 @@ function initializeFilesList() {
             });
         }
     }
-    Object.keys(coursesData.__folders || {}).forEach(root =>
-        collectFiles(coursesData.__folders[root], [root])
-    );
+    // On commence par explorer la racine
+    collectFiles(coursesData, []);
 }
 
 // --- Recherche ---
@@ -90,7 +89,7 @@ function renderSearchResults(files, searchTerm) {
         folderContent.innerHTML = `
             <div class="empty-folder">
                 <div class="empty-folder-icon">🔍</div>
-                <p>Aucun fichier trouvé</p>
+                <p>Aucun résultat</p>
             </div>`;
     }
 
@@ -110,14 +109,16 @@ function renderCurrentFolder() {
             currentPath.map((p, i) =>
                 ` / <span onclick="goToPath(${i})">${p.replace(/_/g, ' ')}</span>`
             ).join('');
-    } else breadcrumb.style.display = 'none';
+    } else {
+        breadcrumb.style.display = 'none';
+    }
 
     const folderContent = document.createElement('div');
     folderContent.className = 'folder-content';
 
     let hasContent = false;
 
-    // Dossiers
+    // Affichage des dossiers
     if (currentFolder.__folders) {
         Object.keys(currentFolder.__folders).forEach(sub => {
             hasContent = true;
@@ -129,7 +130,7 @@ function renderCurrentFolder() {
         });
     }
 
-    // Fichiers
+    // Affichage des fichiers
     if (currentFolder.__files) {
         currentFolder.__files.forEach(f => {
             hasContent = true;
@@ -146,7 +147,7 @@ function renderCurrentFolder() {
         folderContent.innerHTML = `
             <div class="empty-folder">
                 <div class="empty-folder-icon">📂</div>
-                <p>Pas encore de cours disponibles</p>
+                <p>Ce dossier est vide</p>
             </div>`;
     }
 
@@ -158,14 +159,12 @@ function navigateToFolder(name) {
     currentPath.push(name);
     currentFolder = currentFolder.__folders[name];
     renderCurrentFolder();
-    // ATTENTION: On ne ferme PAS la sidebar ici (correction du problème)
 }
 
 function goToRoot() {
     currentPath = [];
     currentFolder = coursesData;
     renderCurrentFolder();
-    // ATTENTION: On ne ferme PAS la sidebar ici (correction du problème)
 }
 
 function goToPath(index) {
@@ -173,7 +172,6 @@ function goToPath(index) {
     currentFolder = coursesData;
     currentPath.forEach(p => currentFolder = currentFolder.__folders[p]);
     renderCurrentFolder();
-    // ATTENTION: On ne ferme PAS la sidebar ici (correction du problème)
 }
 
 // --- Ouverture fichier ---
@@ -189,16 +187,17 @@ async function openFile(filePath, box) {
     };
 
     try {
-        // CORRECTION DE L'URL : On utilise ?path= au lieu de /
+        // CORRECTION : Appel avec ?path=
         const res = await fetch(`${API_URL}/api/file?path=${encodeURIComponent(filePath)}`);
-        if (!res.ok) throw new Error();
+        if (!res.ok) throw new Error('Erreur réseau');
 
-        const data = await res.json(); // Le serveur renvoie du JSON { content: "..." }
-        currentFilePath = filePath;
+        // On récupère le contenu (texte brut pour rendu HTML direct)
+        const content = await res.text();
         
-        // On affiche le contenu reçu
-        contentDiv.innerHTML = data.content;
+        currentFilePath = filePath;
+        contentDiv.innerHTML = content;
 
+        // Mise en surbrillance de l'élément cliqué
         document.querySelectorAll('.item-box').forEach(i => i.classList.remove('active'));
         if (box) box.classList.add('active');
 
@@ -210,9 +209,8 @@ async function openFile(filePath, box) {
             <div class="content-empty">
                 <div class="content-empty-icon">❌</div>
                 <h3>Erreur de chargement</h3>
-                <p>Impossible de charger ce fichier…</p>
+                <p>Impossible de lire le fichier…</p>
             </div>`;
-        closeSidebarIfMobile();
     }
 }
 
@@ -222,14 +220,13 @@ function toggleSidebar() {
     if(sb) sb.classList.toggle('open');
 }
 
-// --- Fonction de visite (pour éviter l'erreur ReferenceError) ---
+// --- Enregistrement visite ---
 function registerVisit() {
-    console.log("Tentative d'enregistrement de la visite...");
     fetch(`${API_URL}/api/visit`, { method: 'POST' })
         .then(() => console.log("Visite enregistrée"))
-        .catch(() => console.log("Erreur visite (silencieuse)"));
+        .catch(() => console.log("Erreur visite silencieuse"));
 }
 
-// --- Initialisation ---
+// --- Lancement ---
 loadCoursesTree();
-registerVisit(); // Maintenant la fonction existe au-dessus !
+registerVisit();
