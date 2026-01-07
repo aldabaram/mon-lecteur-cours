@@ -182,55 +182,54 @@ async function openFile(filePath, box) {
     const sidebar = document.querySelector('.sidebar');
     const isMobile = window.innerWidth <= 768;
 
-    // Fonction utilitaire pour fermer la sidebar si on est en mobile
     const closeSidebarIfMobile = () => {
-        if (isMobile) {
+        if (isMobile && sidebar) {
             sidebar.classList.remove('open');
         }
     };
 
-
-    if (filePath.endsWith('.md')) {
-        contentDiv.innerHTML = `
-            <div class="content-empty">
-                <div class="content-empty-icon">❌</div>
-                <h3>Lecture interdite</h3>
-                <p>Les fichiers .md ne peuvent pas être ouverts.</p>
-            </div>`;
-        closeSidebarIfMobile(); // Fermeture même si lecture interdite
-        return;
-    }
-
     try {
-        const res = await fetch(`${API_URL}/api/file/${encodeURIComponent(filePath)}`);
+        // CORRECTION DE L'URL : On utilise ?path= au lieu de /
+        const res = await fetch(`${API_URL}/api/file?path=${encodeURIComponent(filePath)}`);
         if (!res.ok) throw new Error();
 
-        const content = await res.text();
+        const data = await res.json(); // Le serveur renvoie du JSON { content: "..." }
         currentFilePath = filePath;
-        contentDiv.innerHTML = content;
+        
+        // On affiche le contenu reçu
+        contentDiv.innerHTML = data.content;
 
         document.querySelectorAll('.item-box').forEach(i => i.classList.remove('active'));
         if (box) box.classList.add('active');
 
-        // Fermer la sidebar sur mobile UNIQUEMENT pour les fichiers (Logique conservée)
         closeSidebarIfMobile(); 
 
-    } catch {
+    } catch (err) {
+        console.error("Erreur lecture:", err);
         contentDiv.innerHTML = `
             <div class="content-empty">
                 <div class="content-empty-icon">❌</div>
                 <h3>Erreur de chargement</h3>
                 <p>Impossible de charger ce fichier…</p>
             </div>`;
-        closeSidebarIfMobile(); // Fermer la sidebar en cas d'erreur de chargement de fichier
+        closeSidebarIfMobile();
     }
 }
 
 /* --- Bouton Mobile --- */
 function toggleSidebar() {
-    document.querySelector('.sidebar').classList.toggle('open');
+    const sb = document.querySelector('.sidebar');
+    if(sb) sb.classList.toggle('open');
+}
+
+// --- Fonction de visite (pour éviter l'erreur ReferenceError) ---
+function registerVisit() {
+    console.log("Tentative d'enregistrement de la visite...");
+    fetch(`${API_URL}/api/visit`, { method: 'POST' })
+        .then(() => console.log("Visite enregistrée"))
+        .catch(() => console.log("Erreur visite (silencieuse)"));
 }
 
 // --- Initialisation ---
 loadCoursesTree();
-registerVisit();
+registerVisit(); // Maintenant la fonction existe au-dessus !
