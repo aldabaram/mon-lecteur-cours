@@ -4,28 +4,42 @@ const path = require("path");
 
 const app = express();
 
-// 🔥 IMPORTANT POUR RAILWAY
+// Configuration du port pour Render
 const PORT = process.env.PORT || 3000;
 
-// 📁 dossier des cours (ATTENTION À LA CASSE)
-const COURS_DIR = path.join(__dirname, "cours");
+// Utilisation de path.resolve pour garantir un chemin absolu propre
+const COURS_DIR = path.resolve(__dirname, "cours");
 
 app.use(express.json());
 app.use(express.static("public"));
 
-console.log("📂 Dossier cours utilisé :", COURS_DIR);
+// --- DÉBOGAGE AU DÉMARRAGE ---
+console.log("🚀 Démarrage du serveur...");
+console.log("📂 Chemin absolu attendu pour 'cours' :", COURS_DIR);
 
-/**
- * Vérification que le dossier existe
- */
-if (!fs.existsSync(COURS_DIR)) {
-    console.error("❌ Le dossier 'cours' est introuvable !");
+// On vérifie ce qui existe réellement sur le serveur Render
+if (fs.existsSync(COURS_DIR)) {
+    console.log("✅ Le dossier 'cours' a été trouvé.");
+    console.log("📄 Contenu immédiat :", fs.readdirSync(COURS_DIR));
+} else {
+    console.error("❌ ERREUR : Le dossier 'cours' est introuvable à la racine !");
+    console.log("🔍 Contenu de la racine (__) :", fs.readdirSync(__dirname));
 }
+// -----------------------------
 
 /**
- * Construit l'arborescence
+ * Route de santé pour Render (Health Check)
+ */
+app.get("/health", (req, res) => {
+    res.status(200).send("Serveur opérationnel");
+});
+
+/**
+ * API : Construit l'arborescence
  */
 function buildTree(dirPath) {
+    if (!fs.existsSync(dirPath)) return [];
+    
     const entries = fs.readdirSync(dirPath, { withFileTypes: true });
 
     return entries.map(entry => {
@@ -49,9 +63,6 @@ function buildTree(dirPath) {
     });
 }
 
-/**
- * 🌳 API tree
- */
 app.get("/api/tree", (req, res) => {
     try {
         const tree = buildTree(COURS_DIR);
@@ -63,31 +74,33 @@ app.get("/api/tree", (req, res) => {
 });
 
 /**
- * 📄 API file
+ * API : Lecture d'un fichier avec sécurité
  */
 app.get("/api/file", (req, res) => {
-    const filePath = req.query.path;
+    const requestedPath = req.query.path;
 
-    if (!filePath) {
+    if (!requestedPath) {
         return res.status(400).json({ error: "Chemin manquant" });
     }
 
-    const fullPath = path.join(COURS_DIR, filePath);
+    // Sécurité : on empêche de sortir du dossier cours avec ../
+    const safePath = path.normalize(requestedPath).replace(/^(\.\.(\/|\\|$))+/, '');
+    const fullPath = path.join(COURS_DIR, safePath);
 
-    // 🔐 sécurité
     if (!fullPath.startsWith(COURS_DIR)) {
         return res.status(403).json({ error: "Accès interdit" });
     }
 
     fs.readFile(fullPath, "utf8", (err, data) => {
         if (err) {
-            console.error("❌ Erreur lecture fichier:", err);
-            return res.status(500).json({ error: "Impossible de lire le fichier" });
+            console.error(`❌ Erreur lecture fichier (${fullPath}):`, err);
+            return res.status(404).json({ error: "Fichier introuvable" });
         }
         res.json({ content: data });
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`🚀 Serveur lancé sur le port ${PORT}`);
+// Écoute sur 0.0.0.0 est crucial pour Render
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`🚀 Serveur lancé sur http://0.0.0.0:${PORT}`);
 });
