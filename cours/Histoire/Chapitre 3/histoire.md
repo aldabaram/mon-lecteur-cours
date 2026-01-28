@@ -35,13 +35,4 @@ En 1095 , le pape Urbain II appelle à la **guerre sainte** afin d'aider les chr
 
 En réaction à l'avancée chrétienne, l'idée de **jihad** est réactivée par les musulmans. En 1144 la ville d'Edesse (faisant partie des ELO) est prise par les musulmans. Le pape avec l'appui de Bernard de Clairvaux lance la IIe croisade.
 
-#### La Reconquista en Occident
-
-Cette idée de guerre sainte apparaît aussi en Occident dans la peninsule ibérique. Au VIIIe les rois catholiques se lancent dans la **Reconquista**. Ainsi peu à peu les territoires musulmans reviennent aux mains des chrétiens. La prise de Tolède en 1085 puis la victoire de Las Navas de Tolsa (1212) marque ka victoire définitive des chrétiens en 1266 les musulmans ne possèdent plus que le royaume de Grenade qui tombe en 1492.
-
-!!! warning
-    Reconquista: mouvement guerrier qui conduit à la "reconquête" progressive de la péninsule ibérique par les chrétiens sur les musulmans.
-
-#### B) Des contacts commérciaux
-
 </div>
