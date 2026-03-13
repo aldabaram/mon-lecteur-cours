@@ -80,6 +80,6 @@ Intro : page 488
 - Les exagérations mais aussi les accumulations renforcent la dénonciation
 - Il frappe les esprits avec des formules simples avec l'idée d'une lutte constante un champ lexical de la mort, de la destruction
 
-<p style="text-align: center; font-size:400px; color: black; line-height: 1.2;">🤓</p>
+<p style="font-size:350px;">💩🤠🤮🤢🧐🤓☠👻🙈🙉🙊🐵🐷😁😀😂🤣😎😋🤗🙄😫🤑🤬🤡👺👹🥞🍟</p>
 
 </div>

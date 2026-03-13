@@ -30,9 +30,28 @@
 
 ---
 
-2 romans au choix:
+## 2 romans au choix
 
 - *Son empire*, 2021
 - *Un petit peu malheuresement*, 2025
+
+Apporter un support + 2-3 feuilles et stylo
+
+## Question à poser
+
+- Vos romans sont-ils inspirés de faits réels ? Ou prenez vous votre inspiration ?
+- Pourquoi a-t-elle choisi le point de vue d'un enfant pour ses romans ?
+- Pourquoi dans Son empire, vousn'avez pas donné de nom aux 3 personeages principaux ?
+- Quelles émotions avez vous voulu transmettre evec son empire ?
+- Avec quelles études avez vous pu atteindre ce métier ?
+- Pourquoi utilise t'elle des dénonciation particulière pour la mère et son amante ?
+- Avez vous déjà été contrainte d'avoir changer un ou des paragraphes
+- Y a-t-il un roman pour auquelle vous etes le plus attachée ?
+- Pourquoi il y a beaucoup d'enfant dans vos romans ?
+- Avez vous déjà eu le syndrome de la page blanche ? Si oui quel livre ?
+
+## Def romans
+
+Gros livre
 
 </div>
