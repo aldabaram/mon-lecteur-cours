@@ -50,6 +50,8 @@ Apporter un support + 2-3 feuilles et stylo
 - Pourquoi il y a beaucoup d'enfant dans vos romans ?
 - Avez vous déjà eu le syndrome de la page blanche ? Si oui quel livre ?
 
+<p style="text-align: center; font-size:150px; color: black; line-height: 1.2;">🤯😬😎😫😱🤡🤮🤑🥶🐆🐐🐑🐁🤖😁😂🤣😃😄😅😆😉😊😋😎😍😘🥰😗😙😚🙂🤗🤩🤔🤨😐😑😶🙄😏😣😥😮🤐😯😪😫🥱😴😌😛🤭🧐🤓😈👿👹👺💀☠👻👽👾🤖💩😺😸😹😻😼😽🙀😿🐱‍👤😾🐱‍🏍🐱‍💻🐱‍🐉🐱‍👓🐱‍🚀🙈🙉🙊</p>
+
 ## Def romans
 
 Gros livre

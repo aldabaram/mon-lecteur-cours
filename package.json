@@ -4,11 +4,15 @@
   "description": "Projet Lecteur de Cours",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "export:html": "node scripts/export-md-to-html.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.22.1"
+    "express": "^4.22.1",
+    "markdown-it": "^14.1.1",
+    "markdown-it-anchor": "^9.2.0",
+    "markdown-it-table-of-contents": "^1.2.0"
   },
   "repository": {
     "type": "git",

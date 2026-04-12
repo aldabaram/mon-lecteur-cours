@@ -36,10 +36,20 @@ Les circulations entre l'Europe et le "nouveau monde" (immigration européenne, 
 
 Ces déplacement de population ont fait de certaines capitales européennes de veritables villes cosmopolites. (ex: Lesbonne)
 
-## III/Une première mondialistaion
+## III/Une première mondialisation
 
 ### A/ L'enrichissement de la façade atlantique européenne
 
-*Comment le commerce colonial a-t-il enrichit les villes européennes de la façacede atlantique ?*
+*Comment le commerce colonial a-t-il enrichit les villes européennes de la façade atlantique ?*
+
+### B/ Economie-monde et brassage culturel
+
+*Quelles sont les finalités de la colonisation pour les sociétés de la fin du XVIe siecle ?*
+
+!!! note
+    **Mondialisation :** ouverture des économies nationales à l'échelle de la planète , qui s'accompagne d'échange culturels ou scientifiques.
+
+!!! note
+    **Economie-monde :** concept de l'historien Fernad Braudel qui designe une économie qui n'est pas limité par les frontière et est animée par un dynamique planetaire et sonvent organisée autour d'une ville.
 
 </div>
