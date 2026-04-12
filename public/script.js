@@ -5,6 +5,14 @@ let allFiles = [];
 let currentPath = [];
 let currentFolder = {};
 let currentFilePath = null;
+const ICONS = {
+    file: "\u{1F4C4}",
+    folder: "\u{1F4C1}",
+    folderOpen: "\u{1F4C2}",
+    search: "\u{1F50D}",
+    home: "\u{1F3E0}",
+    error: "\u{274C}"
+};
 
 // --- Chargement des cours ---
 async function loadCoursesTree() {
@@ -20,7 +28,7 @@ async function loadCoursesTree() {
     } catch (error) {
         document.getElementById('folderTree').innerHTML = `
             <div class="error">
-                <div class="empty-folder-icon">âŒ</div>
+                <div class="empty-folder-icon">${ICONS.error}</div>
                 <p>Erreur de connexion au serveur</p>
             </div>
         `;
@@ -82,7 +90,7 @@ function renderSearchResults(files, searchTerm) {
         const displayName = f.name.replace(/_/g, ' ').replace(/\.html$/, '');
         const box = document.createElement('div');
         box.className = 'item-box';
-        box.innerHTML = `<div class="item-icon">ðŸ“„</div><div class="item-name">${displayName}</div>`;
+        box.innerHTML = `<div class="item-icon">${ICONS.file}</div><div class="item-name">${displayName}</div>`;
         box.onclick = () => openFile(f.filePath, box);
         folderContent.appendChild(box);
     });
@@ -90,7 +98,7 @@ function renderSearchResults(files, searchTerm) {
     if (files.length === 0) {
         folderContent.innerHTML = `
             <div class="empty-folder">
-                <div class="empty-folder-icon">ðŸ”</div>
+                <div class="empty-folder-icon">${ICONS.search}</div>
                 <p>Aucun rÃ©sultat</p>
             </div>`;
     }
@@ -107,7 +115,7 @@ function renderCurrentFolder() {
     if (currentPath.length > 0) {
         breadcrumb.style.display = 'block';
         breadcrumb.innerHTML =
-            'ðŸ  <span onclick="goToRoot()">Accueil</span>' +
+            `${ICONS.home} <span onclick="goToRoot()">Accueil</span>` +
             currentPath.map((p, i) =>
                 ` / <span onclick="goToPath(${i})">${p.replace(/_/g, ' ')}</span>`
             ).join('');
@@ -126,7 +134,7 @@ function renderCurrentFolder() {
             hasContent = true;
             const box = document.createElement('div');
             box.className = 'item-box folder-box';
-            box.innerHTML = `<div class="item-icon">ðŸ“</div><div class="item-name">${sub.replace(/_/g, ' ')}</div>`;
+            box.innerHTML = `<div class="item-icon">${ICONS.folder}</div><div class="item-name">${sub.replace(/_/g, ' ')}</div>`;
             box.onclick = () => navigateToFolder(sub);
             folderContent.appendChild(box);
         });
@@ -139,7 +147,7 @@ function renderCurrentFolder() {
             const name = f.name.replace(/_/g, ' ').replace(/\.html$/, '');
             const box = document.createElement('div');
             box.className = 'item-box';
-            box.innerHTML = `<div class="item-icon">ðŸ“„</div><div class="item-name">${name}</div>`;
+            box.innerHTML = `<div class="item-icon">${ICONS.file}</div><div class="item-name">${name}</div>`;
             box.onclick = () => openFile(f.path, box);
             folderContent.appendChild(box);
         });
@@ -148,7 +156,7 @@ function renderCurrentFolder() {
     if (!hasContent) {
         folderContent.innerHTML = `
             <div class="empty-folder">
-                <div class="empty-folder-icon">ðŸ“‚</div>
+                <div class="empty-folder-icon">${ICONS.folderOpen}</div>
                 <p>Ce dossier est vide</p>
             </div>`;
     }
@@ -221,7 +229,7 @@ async function openFile(filePath, box) {
         contentDiv.classList.remove('has-file');
         contentDiv.innerHTML = `
             <div class="content-empty">
-                <div class="content-empty-icon">❌</div>
+                <div class="content-empty-icon">${ICONS.error}</div>
                 <h3>Erreur de chargement</h3>
                 <p>Impossible de lire le fichier...</p>
             </div>`;
