@@ -1,4 +1,4 @@
-const API_URL = ''; // Relatif pour Render/Railway
+﻿const API_URL = ''; // Relatif pour Render/Railway
 
 let coursesData = {};
 let allFiles = [];
@@ -20,7 +20,7 @@ async function loadCoursesTree() {
     } catch (error) {
         document.getElementById('folderTree').innerHTML = `
             <div class="error">
-                <div class="empty-folder-icon">❌</div>
+                <div class="empty-folder-icon">âŒ</div>
                 <p>Erreur de connexion au serveur</p>
             </div>
         `;
@@ -34,7 +34,7 @@ function initializeFilesList() {
     function collectFiles(folderObj, path = []) {
         if (folderObj.__files) {
             folderObj.__files.forEach(file => {
-                // ✅ Double vérification de l'extension
+                // âœ… Double vÃ©rification de l'extension
                 if (file.name.toLowerCase().endsWith('.html')) {
                     allFiles.push({
                         name: file.name,
@@ -69,7 +69,7 @@ function handleSearch(e) {
     renderSearchResults(filtered, searchTerm);
 }
 
-// --- Résultats recherche ---
+// --- RÃ©sultats recherche ---
 function renderSearchResults(files, searchTerm) {
     const container = document.getElementById('folderTree');
     container.innerHTML = '';
@@ -82,7 +82,7 @@ function renderSearchResults(files, searchTerm) {
         const displayName = f.name.replace(/_/g, ' ').replace(/\.html$/, '');
         const box = document.createElement('div');
         box.className = 'item-box';
-        box.innerHTML = `<div class="item-icon">📄</div><div class="item-name">${displayName}</div>`;
+        box.innerHTML = `<div class="item-icon">ðŸ“„</div><div class="item-name">${displayName}</div>`;
         box.onclick = () => openFile(f.filePath, box);
         folderContent.appendChild(box);
     });
@@ -90,8 +90,8 @@ function renderSearchResults(files, searchTerm) {
     if (files.length === 0) {
         folderContent.innerHTML = `
             <div class="empty-folder">
-                <div class="empty-folder-icon">🔍</div>
-                <p>Aucun résultat</p>
+                <div class="empty-folder-icon">ðŸ”</div>
+                <p>Aucun rÃ©sultat</p>
             </div>`;
     }
 
@@ -107,7 +107,7 @@ function renderCurrentFolder() {
     if (currentPath.length > 0) {
         breadcrumb.style.display = 'block';
         breadcrumb.innerHTML =
-            '🏠 <span onclick="goToRoot()">Accueil</span>' +
+            'ðŸ  <span onclick="goToRoot()">Accueil</span>' +
             currentPath.map((p, i) =>
                 ` / <span onclick="goToPath(${i})">${p.replace(/_/g, ' ')}</span>`
             ).join('');
@@ -126,7 +126,7 @@ function renderCurrentFolder() {
             hasContent = true;
             const box = document.createElement('div');
             box.className = 'item-box folder-box';
-            box.innerHTML = `<div class="item-icon">📁</div><div class="item-name">${sub.replace(/_/g, ' ')}</div>`;
+            box.innerHTML = `<div class="item-icon">ðŸ“</div><div class="item-name">${sub.replace(/_/g, ' ')}</div>`;
             box.onclick = () => navigateToFolder(sub);
             folderContent.appendChild(box);
         });
@@ -139,7 +139,7 @@ function renderCurrentFolder() {
             const name = f.name.replace(/_/g, ' ').replace(/\.html$/, '');
             const box = document.createElement('div');
             box.className = 'item-box';
-            box.innerHTML = `<div class="item-icon">📄</div><div class="item-name">${name}</div>`;
+            box.innerHTML = `<div class="item-icon">ðŸ“„</div><div class="item-name">${name}</div>`;
             box.onclick = () => openFile(f.path, box);
             folderContent.appendChild(box);
         });
@@ -148,7 +148,7 @@ function renderCurrentFolder() {
     if (!hasContent) {
         folderContent.innerHTML = `
             <div class="empty-folder">
-                <div class="empty-folder-icon">📂</div>
+                <div class="empty-folder-icon">ðŸ“‚</div>
                 <p>Ce dossier est vide</p>
             </div>`;
     }
@@ -189,29 +189,41 @@ async function openFile(filePath, box) {
     };
 
     try {
-        // CORRECTION : Appel avec ?path=
         const res = await fetch(`${API_URL}/api/file?path=${encodeURIComponent(filePath)}`);
-        if (!res.ok) throw new Error('Erreur réseau');
+        if (!res.ok) throw new Error('Erreur reseau');
 
-        // On récupère le contenu (texte brut pour rendu HTML direct)
         const content = await res.text();
-        
-        currentFilePath = filePath;
-        contentDiv.innerHTML = content;
 
-        // Mise en surbrillance de l'élément cliqué
+        currentFilePath = filePath;
+        contentDiv.classList.add('has-file');
+        contentDiv.innerHTML = `
+            <div class="course-frame">
+                <iframe
+                    class="course-iframe"
+                    title="${filePath}"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                    sandbox="allow-same-origin"
+                ></iframe>
+            </div>
+        `;
+
+        const iframe = contentDiv.querySelector('.course-iframe');
+        if (iframe) iframe.srcdoc = content;
+
         document.querySelectorAll('.item-box').forEach(i => i.classList.remove('active'));
         if (box) box.classList.add('active');
 
-        closeSidebarIfMobile(); 
+        closeSidebarIfMobile();
 
     } catch (err) {
-        console.error("Erreur lecture:", err);
+        console.error('Erreur lecture:', err);
+        contentDiv.classList.remove('has-file');
         contentDiv.innerHTML = `
             <div class="content-empty">
                 <div class="content-empty-icon">❌</div>
                 <h3>Erreur de chargement</h3>
-                <p>Impossible de lire le fichier…</p>
+                <p>Impossible de lire le fichier...</p>
             </div>`;
     }
 }
@@ -225,7 +237,7 @@ function toggleSidebar() {
 // --- Enregistrement visite ---
 function registerVisit() {
     fetch(`${API_URL}/api/visit`, { method: 'POST' })
-        .then(() => console.log("Visite enregistrée"))
+        .then(() => console.log("Visite enregistrÃ©e"))
         .catch(() => console.log("Erreur visite silencieuse"));
 }
 
