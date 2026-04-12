@@ -201,6 +201,9 @@ async function openFile(filePath, box) {
         if (!res.ok) throw new Error('Erreur reseau');
 
         const content = await res.text();
+        // Evite l'erreur "Blocked script execution in about:srcdoc" en retirant
+        // les scripts embarques des exports HTML.
+        const sanitizedContent = content.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
 
         currentFilePath = filePath;
         contentDiv.classList.add('has-file');
@@ -217,7 +220,7 @@ async function openFile(filePath, box) {
         `;
 
         const iframe = contentDiv.querySelector('.course-iframe');
-        if (iframe) iframe.srcdoc = content;
+        if (iframe) iframe.srcdoc = sanitizedContent;
 
         document.querySelectorAll('.item-box').forEach(i => i.classList.remove('active'));
         if (box) box.classList.add('active');
