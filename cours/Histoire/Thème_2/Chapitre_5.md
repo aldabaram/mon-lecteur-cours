@@ -48,8 +48,23 @@ Les territoires sous le controle de l'Etat connaissent de nombreuses évolution 
 !!! info
     Domaine royal: ensemble des terres et des droits appertenant au monarque en tant que souverin et seigneur. L'expression dosparaît au XVIIe siècle au profit du "royaume"
 
-### I/ Quels ont été les obstacles au renforcement de l'Etat ?
+### II/ Quels ont été les obstacles au renforcement de l'Etat ?
 
 ### A/ Faire face aux guerres de religions
+
+### B/ La Fronde: une crise politique au début du règne de Louis XIV
+
+A la mort de Louis XIII EN 1643 soun fils Louis XIV n'a que 5 ans de fait sa mère Anne d'AUtriche avec l'aide du principal ministre Mazarin exerce la **régence**. Cette période est marquée par de nombreuses contestations de la part des parlementaires puis des nobles qui s'opposent à la progression de l'**absolutisme** royal: c'est la **Fronde** (1648-1653)
+
+!!! info
+    **Régence :** gouvernement temporaire en cas d'absence ou de minorité du roi.
+    **Absolutisme :** terme qui désigne un système politique où le roi dispose de tous les pouvoirs.
+    **Fronde :** période de révoltes menées par les princes et les parlements inquiets du renforcement de l'autorité royale (1648-1653)
+
+### III/ L'absolutisme sous Louis XIV
+
+### A/ Un nouveau modèle politique: l'absolutisme
+
+A partir du XVIe siècle de nombreux penseur tel que Cardin le Bret ou Jean Bodin dévelope de nombreuse théories sur l'absolutisme. D'après eux le pouvoir du roi est tel que seul le roi possède la **souveraineté** (capacité qu'un roi va avoir de gouverné). Par ailleur d'autre penseur comme Bossuet rajoute la question du pouvoir absolue de **droit divin**, autrement dit le pouvoir du roi venant de dieu
 
 </div>
